@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mauro Buffalo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --white: #ffffff;
+    --muted: rgba(255,255,255,0.45);
+    --accent: #00e5cc;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    mix-blend-mode: normal;
+  }
+
+  .nav-logo {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 18px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-lang {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: 1px solid rgba(255,255,255,0.15);
+  }
+  .nav-lang a { color: var(--white); text-decoration: none; }
+  .nav-lang span { color: var(--muted); }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero-photo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(100%) brightness(0.38) contrast(1.1);
+    display: block;
+  }
+
+  .hero-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #1a1a1a 0%, #0a0a0a 60%, #111 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-photo-placeholder span {
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.12);
+    text-transform: uppercase;
+  }
+
+  .hero-name-wrap {
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(150px, 24vw, 400px);
+    line-height: 0.88;
+    color: var(--white);
+    display: inline-block;
+    animation: slideLeft 18s linear infinite;
+    will-change: transform;
+    letter-spacing: 0.02em;
+    mix-blend-mode: difference;
+    
+  }
+
+  @keyframes slideLeft {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .hero-bottom {
+    position: absolute;
+    bottom: 48px;
+    left: 40px;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 3;
+  }
+
+  .hero-location {
+    font-size: 20px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .hero-role {
+    text-align: right;
+  }
+  .hero-role p {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.5vw, 65px);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.3;
+    animation: bounce 2.5s ease-in-out infinite;
+  }
+  .hero-scroll-hint span { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .hero-scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: var(--white);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 120px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 20px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-heading {
+    font-family: var(--font-display);
+    font-size: clamp(80px, 16vw, 220px);
+    line-height: 0.9;
+    color: var(--white);
+  }
+
+  .about-text {
+    font-size: 21px;
+    line-height: 1.00;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .about-text p { margin-bottom: 20px; }
+
+  .about-skills {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .skill-tag {
+    font-size: 18px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--muted);
+    transition: all 0.3s;
+  }
+  .skill-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* WORK */
+  #work { max-width: 1400px; }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    margin-top: 0;
+  }
+
+  .work-item {
+    position: relative;
+    background: #111;
+    overflow: hidden;
+    aspect-ratio: 16/10;
+    cursor: none;
+  }
+
+  .work-item-bg {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #141414 0%, #0d0d0d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .work-item:hover .work-item-bg { transform: scale(1.04); }
+
+  .work-item-num {
+    font-family: var(--font-display);
+    font-size: 120px;
+    color: rgba(255,255,255,0.04);
+    position: absolute;
+    bottom: -20px;
+    right: 20px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .work-item-info {
+    position: absolute;
+    inset: 0;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .work-item:hover .work-item-info { opacity: 1; }
+
+  .work-item-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .work-item-cat {
+    font-size: 15px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .work-placeholder {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.06);
+    text-align: center;
+  }
+
+  .work-item-always {
+    position: absolute;
+    bottom: 28px;
+    left: 28px;
+  }
+
+  /* SERVICES */
+  .services-list {
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .service-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: padding 0.3s ease;
+    cursor: default;
+  }
+  .service-row:hover { padding-left: 16px; }
+  .service-row:hover .service-name { color: var(--white); }
+  .service-name {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.5vw, 48px);
+    color: rgba(255,255,255,0.55);
+    transition: color 0.3s;
+    letter-spacing: 0.02em;
+  }
+  .service-desc {
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.2);
+    text-align: right;
+    max-width: 280px;
+    line-height: 1.6;
+  }
+
+  /* CONTACT */
+  #contact {
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 60px 40px 120px;
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  #contact .section-label { max-width: 1400px; margin: 0 auto 48px; width: 100%; }
+
+  .contact-heading {
+    font-family: var(--font-display);
+    font-size: clamp(80px, 16vw, 220px);
+    line-height: 0.88;
+    color: var(--white);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .contact-footer {
+    position: absolute;
+    bottom: 48px;
+    left: 40px;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .contact-footer-links {
+    display: flex;
+    gap: 28px;
+  }
+  .contact-footer-links a {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .contact-footer-links a:hover { color: var(--white); }
+  .contact-email {
+    font-size: 17px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .contact-email a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .contact-email a:hover { color: var(--accent); }
+
+  .contact-social {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    margin-top: 60px;
+    display: flex;
+    gap: 32px;
+  }
+  .contact-social a {
+    font-size: 18px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .contact-social a:hover { color: var(--accent); }
+
+  /* PAGE TRANSITIONS */
+  .page-transition {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .work-grid { grid-template-columns: 1fr; }
+    #contact { padding: 80px 24px; }
+    .contact-heading { font-size: clamp(60px, 18vw, 120px); }
+    .contact-footer { flex-direction: column; gap: 20px; align-items: flex-start; }
+  }
+
+  .work-item-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.6;
+  transition: opacity 0.4s ease;
+}
+.work-item:hover .work-item-img {
+  opacity: 0.3;
+}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" id="nav-logo-text">Systems Analysis and Software Development Student</a>
+  <ul class="nav-links">
+    <li><a href="#services" id="nav-obj">Objetivos</a></li>
+    <li><a href="#work" id="nav-proj">Projetos</a></li>
+    <li><a href="#about" id="nav-sobre">Sobre</a></li>
+    <li><a href="#contact" id="nav-contact">Contato</a></li>
+    <li class="nav-lang">
+      <a href="#" onclick="setLang('pt')">PT</a>
+      <span> / </span>
+      <a href="#" onclick="setLang('en')" style="color: rgba(255,255,255,0.3);">EN</a>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="padding: 0; max-width: none;">
+  <div class="hero-photo">
+  <img src="foto-mauro.png" alt="Mauro Buffalo">
+  </div>
+
+  <div class="hero-name-wrap">
+    <!-- Nome duplicado para criar efeito de loop infinito -->
+    <span class="hero-name" id="hero-name-text">
+      Mauro&nbsp;Buffalo&nbsp;&nbsp;&nbsp;Mauro&nbsp;Buffalo&nbsp;&nbsp;&nbsp;Mauro&nbsp;Buffalo&nbsp;&nbsp;&nbsp;Mauro&nbsp;Buffalo&nbsp;&nbsp;&nbsp;
+    </span>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-location" id="loc-text">Sorocaba · SP · Brasil</div>
+    <div class="hero-role">
+      <p id="role1">Desenvolvedor Full Stack</p>
+      <p id="role2">Engenheiro de IA</p>
+      <p id=" role3">Tech Writer</p>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="max-width: 100%; padding: 120px 40px;">
+  <div style="max-width: 1400px; margin: 0 auto;">
+    <div class="section-label" id="srv-label">Objetivos: Estágio ou Senioridade Júnior</div>
+    <div class="services-list">
+      <div class="service-row">
+        <span class="service-name" id="s1">Desenvolvimento Web</span>
+        <span class="service-desc" id="s1d">Aplicações full stack modernas e escaláveis</span>
+      </div>
+      <div class="service-row">
+        <span class="service-name" id="s2">Engenharia de IA</span>
+        <span class="service-desc" id="s2d">Integração de LLMs, RAG,<br>automação e soluções inteligentes</span>
+      </div>
+      <div class="service-row">
+        <span class="service-name" id="s3">Technical Writing</span>
+        <span class="service-desc" id="s3d">Documentação de APIs e Softwares</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work" style="max-width: 100%; padding: 0 0 120px;">
+  <div style="max-width: 1400px; margin: 0 auto; padding: 0 40px 48px;">
+    <div class="section-label" id="work-label">Projetos</div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;">
+
+    <div class="work-item">
+  <div class="work-item-bg" style="display:flex; align-items:center; justify-content:center;">
+    <img src="projeto-1.png" alt="Projeto 01" style="width:55%; height:auto; opacity:0.8;">
+  </div>
+      <div class="work-item-num">01</div>
+      <div class="work-item-always">
+        <div class="work-item-title" style="color: rgba(255,255,255,0.2); font-size: 22px;" id="wt1">Projeto 01</div>
+      </div>
+      <div class="work-item-info">
+        <div class="work-item-cat" id="wc1">Writeright pro · Extensão Google Chrome para Tech writers</div>
+        <div class="work-item-title" id="wtl1">Projeto 01</div>
+        <a href="https://chromewebstore.google.com/detail/writeright-pro/cpgakpmaagcpiijhneecnkigihfckbkh" target="_blank" style="color:#00e5cc; font-size:18px; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; margin-top:8px; display:inline-block;">Ver projeto ↗</a>
+      </div>
+    </div>
+
+    <div class="work-item">
+      <div class="work-item-bg" style="display:flex; align-items:center; justify-content:center;">
+        <img src="projeto-2.png" alt="Projeto 02" style="width:55%; height:auto; opacity:0.8;">
+      </div>
+      <div class="work-item-num">02</div>
+      <div class="work-item-always">
+        <div class="work-item-title" style="color: rgba(255,255,255,0.2); font-size: 22px;" id="wt2">Projeto 02</div>
+      </div>
+      <div class="work-item-info">
+        <div class="work-item-cat" id="wc2">CagaAqui · Seu GPS para emergências intestinais</div>
+        <div class="work-item-title" id="wtl2">Projeto 02</div>
+        <a href="https://github.com/maurobuffalo22/cagaqui" target="_blank" style="color:#00e5cc; font-size:18px; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; margin-top:8px; display:inline-block;">Ver projeto ↗</a>
+      </div>
+    </div>
+
+    <div class="work-item">
+      <div class="work-item-bg" style="display:flex; align-items:center; justify-content:center;">
+        <img src="projeto-3.png" alt="Projeto 03" style="width:55%; height:auto; opacity:0.8;">
+      </div>
+      <div class="work-item-num">03</div>
+      <div class="work-item-always">
+        <div class="work-item-title" style="color: rgba(255,255,255,0.2); font-size: 22px;" id="wt3">Projeto 03</div>
+      </div>
+      <div class="work-item-info">
+        <div class="work-item-cat" id="wc3">VigIA · IA avançada para detecção precoce de arritmias fatais - em Desenvolvimento</div>
+        <div class="work-item-title" id="wtl3">Projeto 03</div>
+      </div>
+    </div>
+
+    <div class="work-item">
+      <div class="work-item-bg" style="display:flex; align-items:center; justify-content:center;">
+        <img src="projeto-4.png" alt="Projeto 04" style="width:55%; height:auto; opacity:0.8;">
+      </div>
+      <div class="work-item-num">04</div>
+      <div class="work-item-always">
+        <div class="work-item-title" style="color: rgba(255,255,255,0.2); font-size: 22px;" id="wt4">Projeto 04</div>
+      </div>
+      <div class="work-item-info">
+        <div class="work-item-cat" id="wc4">Website para Elev Naturopatia · saúde e bem estar - em Desenvolvimento</div>
+        <div class="work-item-title" id="wtl4">Projeto 04</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label" id="abt-label">Sobre</div>
+  <div class="about-grid">
+    <div>
+      <h2 class="about-heading" id="abt-heading">Além<br>do<br>portfólio</h2>
+    </div>
+    <div>
+      <div class="about-text">
+        <p id="abt-p1">Resolvi mudar de carreira aos 44 anos (dá um frio na espinha, confesso...). Hoje, sou aspirante a desenvolvedor full stack e engenheiro de IA baseado em Sorocaba, SP. Meu foco é construir soluções digitais que unem tecnologia de ponta com experiências de usuário excepcionais.</p>
+        <p id="abt-p2">Para isso, ingressei na faculdade de Análise de Sistemas e Desenvolvimento de Softwares, e estou sempre realizando cursos na área de IA, desenvolvimento web e vários outros, como a Escola da Nuvem, que oferece treinamentos em fundamentos de nuvem (AWS Re/Start), inteligência artificial e no code.</p>
+        <p id="abt-p3">Tenho vivência prática com metodologias ágeis (Kanban e Scrum), facilidade de comunicação com times técnicos e perfil multidisciplinar, diferenciais que agregam valor em ambientes de desenvolvimento de software. </p>
+        <p id="abt-p4">Fui um dos selecionados da minha faculdade para participar do projeto acadêmico internacional NASA SEE 2026, onde serei responsável pela documentação técnica dos softwares embarcados no Rover Lunar, em colaboração com equipe internacional.</p>
+        <p id="abt-p5">Sou ferrenho defensor dos animais(todos eles). Já realizei diversos resgates e trabalhos voluntários para ONGs que cuidam de animais vítimas de maldade e exploração.</p>
+        <p id="abt-p6">Tenho 3 cachorros, a Maila, o Banzé e o Bob. E adoro tomar uma cerveja gelada.</p>
+        <p id="abt-p7">Meu objetivo profissional é entregar código limpo, produtos escaláveis e interfaces que as pessoas realmente gostam de usar.</p>
+      </div>
+      <div class="about-skills">
+        <span class="skill-tag">HTML</span>
+        <span class="skill-tag">CSS</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">RAG</span>
+        <span class="skill-tag">LLMs</span>
+        <span class="skill-tag">IA</span>
+        <span class="skill-tag">AWS</span>
+        <span class="skill-tag">FastAPI</span>
+        <span class="skill-tag">Inglês avançado</span>
+        <span class="skill-tag">Django</span>
+        <span class="skill-tag">Kanban</span>
+        <span class="skill-tag">Scrum</span>
+        <span class="skill-tag">Git e Github</span>
+        <span class="skill-tag">Pentest</span>
+        <span class="skill-tag">Engenharia de Prompt</span>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding: 120px 0; max-width: none;">
+  <div class="section-label" style="max-width: 1400px; margin: 0 auto 48px; padding: 0 40px;" id="ctt-label">Contato</div>
+  <div style="max-width: 1400px; margin: 0 auto; padding: 0 40px;">
+    <h2 class="contact-heading" id="ctt-heading">Let's<br>connect.</h2>
+    <div class="contact-social">
+      <a href="https://www.linkedin.com/in/mauro-buffalo-308112244/" id="ctt-li">LinkedIn ↗</a>
+      <a href="mailto:mauro@buffalo.dev" id="ctt-mail">maurobuffalo22@gmail.com ↗</a>
+      <a href="https://github.com/maurobuffalo22" id="ctt-gh">GitHub ↗</a>
+      <a href="#" id="ctt-gh"> WHATSAPP(47)99221-7822 ↗</a>
+    </div>
+  </div>
+  <div class="contact-footer">
+    <div class="contact-footer-links">
+      <a href="#" id="lnk-cookies">Desenvolvido por Mauro Buffalo</a>
+    </div>
+    
+  </div>
+</section>
+
+<script>
+  /* ── CURSOR ── */
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) *.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+  document.querySelectorAll('a, .work-item, .service-row').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '6px';
+      cursor.style.height = '6px';
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '40px';
+      ring.style.height = '40px';
+    });
+  });
+
+  /* ── LANG SWITCH ── */
+  const translations = {
+    pt: {
+      'nav-logo-text': 'Estudante de Análise de Sistemas e Desenvolvimento de Softwares',
+      'nav-obj': 'Objetivos', 'nav-proj': 'Projetos', 'nav-sobre': 'Sobre', 'nav-contact': 'Contato',
+      'srv-label': 'Objetivos: Estágio ou Senioridade Júnior', 'work-label': 'Projetos', 'abt-label': 'Sobre',
+      'ctt-label': 'Contato', 'abt-heading': 'Além\ndo\nportfólio',
+      'ctt-heading': "Let's\nconnect.",
+      'role1': 'Desenvolvedor Full Stack', 'role2': 'Engenheiro de IA',
+      'loc-text': 'Sorocaba · SP · Brasil',
+      's1': 'Desenvolvimento Web', 's1d': 'Aplicações full stack modernas e escaláveis',
+      's2': 'Engenharia de IA', 's2d': 'Integração de LLMs, RAG,\nautomação e soluções inteligentes',
+      's3': 'Tech Writing', 's3d': 'Documentação de APIs e Softwares',
+      'abt-p1': 'Resolvi mudar de carreira aos 44 anos (dá um frio na espinha, confesso...). Hoje, sou aspirante a desenvolvedor full stack e engenheiro de IA baseado em Sorocaba, SP. Meu foco é construir soluções digitais que unem tecnologia de ponta com experiências de usuário excepcionais..',
+      'abt-p2': 'Para isso, ingressei na faculdade de Análise de Sistemas e Desenvolvimento de Softwares, e estou sempre realizando cursos na área de IA, desenvolvimento web e vários outros, como a Escola da Nuvem, que oferece treinamentos em fundamentos de nuvem (AWS Re/Start), inteligência artificial e no code.',
+      'abt-p3': 'Tenho vivência prática com metodologias ágeis (Kanban e Scrum), facilidade de comunicação com times técnicos e perfil multidisciplinar, diferenciais que agregam valor em ambientes de desenvolvimento de software.',
+      'abt-p4': 'Fui um dos selecionados da minha faculdade para participar do projeto acadêmico internacional NASA SEE 2026, onde serei responsável pela documentação técnica dos softwares embarcados no Rover Lunar, em colaboração com equipe internacional.',
+      'abt-p5': 'Sou ferrenho defensor dos animais(todos eles). Já realizei diversos resgates e trabalhos voluntários para ONGs que cuidam de animais vítimas de maldade e exploração.',
+      'abt-p6': 'Tenho 3 cachorros, a Maila, o Banzé e o Bob. E adoro tomar uma cerveja gelada.',
+      'abt-p7': 'Meu objetivo profissional é entregar código limpo, produtos escaláveis e interfaces que as pessoas realmente gostam de usar.',
+      'ctt-li': 'LinkedIn ↗', 'ctt-mail': 'mauro@buffalo.dev ↗', 'ctt-gh': 'GitHub ↗',
+      'lnk-cookies': 'Desenvolvido por Mauro Buffalo',
+      'wt1':'Projeto 01','wt2':'Projeto 02','wt3':'Projeto 03','wt4':'Projeto 04',
+      'wtl1':'Projeto 01','wtl2':'Projeto 02','wtl3':'Projeto 03','wtl4':'Projeto 04',
+      'wp1':'Projeto em breve','wp2':'Projeto em breve','wp3':'Projeto em breve','wp4':'Projeto em breve',
+    },
+    en: {
+      'nav-logo-text': 'Systems Analysis and Software Development Student',
+      'nav-obj': 'Objectives', 'nav-proj': 'Projects', 'nav-sobre': 'About', 'nav-contact': 'Contact',
+      'srv-label': 'Objectives: Internship or Junior Position', 'work-label': 'Projects', 'abt-label': 'About',
+      'ctt-label': 'Contact', 'abt-heading': 'Beyond\nthe\nportfolio',
+      'ctt-heading': "Let's\nconnect.",
+      'role1': 'Full Stack Developer', 'role2': 'AI Engineer',
+      'loc-text': 'Sorocaba · SP · Brazil',
+      's1': 'Web Development', 's1d': 'Modern full stack applications and scalable',
+      's2': 'AI Engineering', 's2d': 'LLM integration, RAG,\nautomation and intelligent solutions',
+      's3': 'Tech Writing', 's3d': 'API and Software Documentation',
+      'abt-p1': "I decided to change careers at 44 (it gives me chills, I confess...). Today, I'm an aspiring full-stack developer and AI engineer based in Sorocaba, SP. My focus is on building digital solutions that combine cutting-edge technology with exceptional user experiences..",
+      'abt-p2': "To that end, I enrolled in a Systems Analysis and Software Development program, and I'm always taking courses in AI, web development, and various other areas, such as the Cloud School, which offers training in cloud fundamentals (AWS Re/Start), artificial intelligence, and no-code.",
+      'abt-p3': "I have practical experience with agile methodologies (Kanban and Scrum), excellent communication skills with technical teams, and a multidisciplinary profile, qualities that add value in software development environments.",
+      'abt-p4': 'I was one of those selected from my college to participate in the international academic project NASA SEE 2026, where I will be responsible for the technical documentation of the software embedded in the Lunar Rover, in collaboration with an international team.',
+      'abt-p5': 'I am a staunch defender of animals (all of them). I have carried out numerous rescues and volunteer work for NGOs that care for animals that are victims of cruelty and exploitation.',
+      'abt-p6': 'I have 3 dogs, Maila, Banzé and Bob. And I love drinking a cold beer.',
+      'abt-p7': 'My professional goal is to deliver clean code, scalable products, and interfaces that people actually enjoy using.',
+      'ctt-li': 'LinkedIn ↗', 'ctt-mail': 'mauro@buffalo.dev ↗', 'ctt-gh': 'GitHub ↗',
+      'lnk-cookies': 'Developed by Mauro Buffalo',
+      'wt1':'Project 01','wt2':'Project 02','wt3':'Project 03','wt4':'Project 04',
+      'wtl1':'Project 01','wtl2':'Project 02','wtl3':'Project 03','wtl4':'Project 04',
+      'wp1':'Coming soon','wp2':'Coming soon','wp3':'Coming soon','wp4':'Coming soon',
+    }
+  };
+
+  let currentLang = 'pt';
+  function setLang(lang) {
+    currentLang = lang;
+    const t = translations[lang];
+    Object.entries(t).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = val.replace(/\n/g, '<br>');
+    });
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+    const ptLink = document.querySelector('a[onclick="setLang(\'pt\')"]');
+    const enLink = document.querySelector('a[onclick="setLang(\'en\')"]');
+    if (ptLink) ptLink.style.color = lang === 'pt' ? 'var(--white)' : 'rgba(255,255,255,0.3)';
+    if (enLink) enLink.style.color = lang === 'en' ? 'var(--white)' : 'rgba(255,255,255,0.3)';
+  }
+
+  /* ── SCROLL REVEAL ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.section-label, .about-heading, .about-text, .service-row, .work-item, .contact-heading').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
