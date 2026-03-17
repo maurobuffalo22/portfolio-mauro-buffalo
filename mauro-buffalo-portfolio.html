@@ -534,56 +534,59 @@
   opacity: 0.3;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+  .cursor, .cursor-ring { display: none; }
+  
+  .nav-links { display: none; }
+  
+  .nav-logo {
+    font-size: 9px;
+    max-width: 60%;
+    line-height: 1.4;
+  }
+
   .hero-name {
-    font-size: 18vw;
+    font-size: 22vw;
   }
 
   .hero-bottom {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
-    bottom: 30px;
+    gap: 8px;
+    bottom: 24px;
+    left: 20px;
+    right: 20px;
   }
 
   .hero-role {
     text-align: left;
   }
 
-  nav {
-    padding: 16px 20px;
+  .hero-role p {
+    font-size: 14px;
   }
 
-  .nav-logo {
-    font-size: 9px;
-    max-width: 200px;
+  .hero-location {
+    font-size: 10px;
   }
 
   .contact-heading {
     font-size: 18vw;
   }
 
-  .about-heading {
-    font-size: 18vw;
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
 
   .work-grid {
     grid-template-columns: 1fr !important;
   }
 
-  .service-name {
-    font-size: 24px;
-  }
-
-  .service-desc {
-    display: none;
-  }
-
   section {
     padding: 60px 20px;
   }
 }
-
 </style>
 </head>
 <body>
